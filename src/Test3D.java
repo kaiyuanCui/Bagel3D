@@ -131,7 +131,7 @@ public class Test3D extends AbstractGame {
         int length = 100;
         int bigLength = 1000;
         for(int i = 0; i < bigLength; i+=length){
-            for(int j = 0; j < bigLength; j+=length) {
+            for(int j = 0; j <= bigLength; j+=length) {
                 rect = new Rectangle3D(new Point3D(j, i, 0), length, length, cameraPos.toVector());
                 rect.draw(camera, Window.getWidth(), Window.getHeight());
             }

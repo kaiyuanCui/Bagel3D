@@ -37,19 +37,23 @@ public class Rectangle3D extends Object3D{
 
     }
 
+
     public void draw(Camera camera, double screenWidth, double screenHeight){
+        // everything here is constant, compute beforehand?
         double screenDist = (screenWidth /2 )/ Math.tan(camera.getFov()/2);
-        double bufferPixels = 200;
+
+        // points outside the screen
+        int out = 0;
 
         Point[] cast_vertices = new Point[4];
 
         for (int i =0; i<4; i++){
-
-            Point3D point = vertices[i].copy();
-            Vector3 ray = point.toVector().subtract(camera.getCameraPos().toVector()); // cast a ray from camera to the point
+            // cast a ray from camera to the point
+            Vector3 ray = vertices[i].toVector().subtract(camera.getCameraPos().toVector());
             ray = ray.rotateAroundZ(camera.gethAngle());
 
-            if(ray.x > 0){ // point is behind player
+            // point is behind player
+            if(ray.x > 0){
                 return;
             }
 
@@ -58,28 +62,43 @@ public class Rectangle3D extends Object3D{
             double hor = ray.y/ray.x * screenDist + screenWidth/2;
 
 
-            // do not draw if the projected coordinate is outside the screen
+            // do not draw if the projected coordinates are all outside the screen
             // however, the current implementation would make objects near the edges disappear, if the object is large enough.
-            if(ver < 0 - bufferPixels || ver > screenHeight + bufferPixels || hor < 0 - bufferPixels || hor > screenWidth + bufferPixels){
-                return;
+            if(ver < 0|| ver > screenHeight || hor < 0  || hor > screenWidth){
+                out++;
+                if(out == 4){
+                    return;
+                }
             }
 
             cast_vertices[i] = new Point(hor, ver);
 
         }
 
+
+
+        /*
+        this method does not work, why?
+
+        // check if the points are within the screen
+        for(Point p: cast_vertices){
+            if((p.x >= 0  || p.x <= screenHeight) && (p.y >= 0  || p.y <= screenWidth)){
+                break;
+            }
+            return;
+        }
+         */
+
         // draw lines from edges to one vertex (not very efficient)
 
         Vector2 cast_top_dir = cast_vertices[1].asVector().sub(cast_vertices[0].asVector());
-        // Vector2 cast_bot_dir = cast_vertices[2].asVector().sub(cast_vertices[3].asVector());
         Vector2 cast_rgt_dir = cast_vertices[3].asVector().sub(cast_vertices[0].asVector());
         // Vector2 cast_lft_dir = cast_vertices[2].asVector().sub(cast_vertices[1].asVector());
+        // Vector2 cast_bot_dir = cast_vertices[2].asVector().sub(cast_vertices[3].asVector());
         double topLen = cast_top_dir.length();
         double rgtLen = cast_rgt_dir.length();
-
         cast_top_dir = cast_top_dir.normalised();
         cast_rgt_dir = cast_rgt_dir.normalised();
-
 
 
         for (int s = 0; s < topLen; s+=lineWidth){
