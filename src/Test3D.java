@@ -21,11 +21,9 @@ public class Test3D extends AbstractGame {
     private Object3D zAxis;
 
 
-    private final double STANDARD_FPS = 60;
-    private final long SECOND_TO_NANO = 1000000000;
-    private long frames;
-    private long startTime;
-    private double fps = STANDARD_FPS;
+
+    private static final double STANDARD_FPS = 60;
+    private static double fps = STANDARD_FPS;
 
 
 
@@ -49,7 +47,8 @@ public class Test3D extends AbstractGame {
         yAxis = new Cuboid(new Point3D(0, -5000 ,0), 0, 10000, 0).createObject();
         zAxis = new Cuboid(new Point3D(0, 0 ,-5000), 0, 0, 10000).createObject();
 
-        startTime = System.nanoTime();
+
+        //counter = new Frames(System.nanoTime());
         defaultFont = new Font("res/conformable.otf", 99 );
 
     }
@@ -63,6 +62,7 @@ public class Test3D extends AbstractGame {
 
     @Override
     public void update(Input input) {
+        fps = Frames.fps();
 
         // draw axis first so they do not obstruct other objects
         xAxis = new Cuboid(new Point3D(-5000, 0 ,0), 4999 + camera.getCameraPos().x,0, 0).createObject();
@@ -138,14 +138,7 @@ public class Test3D extends AbstractGame {
 
         }
 
-        frames++;
-        long elapsedTime = System.nanoTime() - startTime;
-        if ( elapsedTime > 0.5 * SECOND_TO_NANO){
-            fps =  frames * 2;
-            frames = 0;
-            startTime = System.nanoTime();
 
-        }
 
         defaultFont.drawString("FPS: " + fps, 20, 50);
     }
