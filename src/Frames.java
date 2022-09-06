@@ -15,6 +15,8 @@ public class Frames {
             frames = 0;
             startTime = System.nanoTime();
 
+
+
         }
         return fps;
     }

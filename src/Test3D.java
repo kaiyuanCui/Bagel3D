@@ -1,6 +1,7 @@
 
 
 import bagel.*;
+import bagel.util.Point;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -9,8 +10,10 @@ import java.util.concurrent.TimeUnit;
 
 
 public class Test3D extends AbstractGame {
-    private static Point3D cameraPos = new Point3D(500, 400, 300);
+    private static Point3D cameraPos = new Point3D(1500, 1400, 700);
     private Camera camera;
+
+    private static Point mousePos = new Point(0, 0);
 
     private Object3D cube;
 
@@ -28,6 +31,8 @@ public class Test3D extends AbstractGame {
     private static final double STANDARD_FPS = 60;
     private static double fps = STANDARD_FPS;
 
+    private int frameCounter = 0;
+
 
 
     private Font defaultFont;
@@ -38,19 +43,29 @@ public class Test3D extends AbstractGame {
         super(1280, 720, "Bagel3D");
 
 
-        camera = new Camera(cameraPos, 0, 90);
+        camera = new Camera(cameraPos, 145, 90);
 
         // for testing purposes only
 
         cube = new Cuboid(new Point3D(300, 400 ,300), 600, 60, 600);
-        objects.add(cube);
+        world.addObject(cube);
 
-        objects.add(new Cuboid(new Point3D(100, 50 ,50), 30, 70, 30));
-        objects.add(new Cuboid(new Point3D(300, 700 ,300), 120, 100, 100));
-        objects.add(new Cuboid(new Point3D(900, -50 ,-50), 100, 100, 100));
+        world.addObject(new Cuboid(new Point3D(100, 50 ,50), 30, 70, 30));
+        world.addObject(new Cuboid(new Point3D(300, 700 ,300), 120, 100, 100));
+        world.addObject(new Cuboid(new Point3D(900, -50 ,-50), 100, 100, 100));
         xAxis = new Cuboid(new Point3D(-5000, 0 ,0), 5000 + camera.getCameraPos().x - 1,0, 0);
         yAxis = new Cuboid(new Point3D(0, -5000 ,0), 0, 10000, 0);
         zAxis = new Cuboid(new Point3D(0, 0 ,-5000), 0, 0, 10000);
+
+        int length = 100;
+        int bigLength = 3000;
+        for(int i = 0; i < bigLength; i+=length){
+            for(int j = 0; j <= bigLength; j+=length) {
+
+                world.addObject(new Cuboid(new Point3D(j, i, 0), length, length, length));
+            }
+
+        }
 
 
         //counter = new Frames(System.nanoTime());
@@ -68,6 +83,11 @@ public class Test3D extends AbstractGame {
     @Override
     public void update(Input input) {
         fps = Frames.fps();
+        frameCounter++;
+        if (frameCounter > 10){
+            world.sort();
+            frameCounter = 0;
+        }
 
         // draw axis first so they do not obstruct other objects
         /*
@@ -121,6 +141,13 @@ public class Test3D extends AbstractGame {
             camera.vTurn(turnSpeed);
         }
 
+        // check mouse movement compared to last frame
+        camera.hTurn(-1 * (input.getMouseX() - mousePos.x));
+        camera.vTurn((input.getMouseY() - mousePos.y));
+        mousePos = new Point(input.getMouseX(), input.getMouseY());
+
+        
+
         cameraPos = new Point3D(cameraPos.toVector().add(move.rotateAroundZ(-1 * camera.gethAngle())));
         camera.setCameraPos(cameraPos);
 
@@ -138,25 +165,21 @@ public class Test3D extends AbstractGame {
 
          */
 
-        int length = 100;
-        int bigLength = 1000;
-        for(int i = 0; i < bigLength; i+=length){
-            for(int j = 0; j <= bigLength; j+=length) {
 
-                new Rectangle3D(new Point3D(j, i, 0), length, length, new Vector3(0,0,0)).draw(camera, Window.getWidth(), Window.getHeight());
-            }
-
-        }
 
         // draw objects
-       //world.draw(camera, Window.getWidth(), Window.getHeight());
+       world.draw(camera, Window.getWidth(), Window.getHeight());
+        /*
         for(Object3D object: objects){
             object.draw(camera, Window.getWidth(), Window.getHeight());
         }
 
+         */
+
 
 
         defaultFont.drawString("FPS: " + fps, 20, 50);
+        defaultFont.drawString("POS: " + cameraPos, 20, 100 );
     }
 
     public static Point3D getCameraPos() {

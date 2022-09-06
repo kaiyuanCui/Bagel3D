@@ -76,8 +76,9 @@ public class Object3D implements Comparable<Object3D>{
 
 
     public void draw(Camera camera, double screenWidth, double screenHeight){
-
-        for(Object3D object: subObjects){
+        int renderSize = 256;
+        sort();
+        for(Object3D object: subObjects.subList(subObjects.size() - renderSize, subObjects.size())){
             object.draw(camera, screenWidth, screenHeight);
         }
 
