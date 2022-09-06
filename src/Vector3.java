@@ -16,16 +16,14 @@ public class Vector3 {
     public Vector3 add(Vector3 another){
         return new Vector3(x+another.x, y+ another.y, z+ another.z);
     }
-    public void multiply(double scalar){
-        x = x * scalar;
-        y = y * scalar;
-        z = z * scalar;
+    public Vector3 multiply(double scalar){
+
+        return new Vector3(x*scalar, y*scalar, z*scalar);
     }
 
-    public void divide(double scalar){
-        x = x / scalar;
-        y = y / scalar;
-        z = z / scalar;
+    public Vector3 divide(double scalar){
+
+        return new Vector3(x/scalar, y/scalar, z/scalar);
     }
 
 
@@ -45,10 +43,32 @@ public class Vector3 {
         return newV;
     }
 
+
+
+    public Vector3 rotateAroundX(double angle){
+        return new Vector3(x, y*Math.cos(angle) - z*Math.sin(angle),
+                z*Math.cos(angle) + y*Math.sin(angle));
+    }
+
+    public Vector3 rotateAroundY(double angle){
+        return new Vector3(x*Math.cos(angle) + z*Math.sin(angle), y,
+                z*Math.cos(angle) - x*Math.sin(angle));
+    }
+
     public Vector3 rotateAroundZ(double angle){
         return new Vector3(x*Math.cos(angle) - y*Math.sin(angle),
-                y*Math.cos(angle) + x*Math.sin(angle),
-                z);
+                y*Math.cos(angle) + x*Math.sin(angle), z);
+    }
+
+    public Vector3 rotate(Vector3 angles){
+        Vector3 result = this.rotateAroundX(angles.x);
+        result = result.rotateAroundY(angles.y);
+        return result.rotateAroundZ(angles.z);
+
+    }
+
+    public Point3D toPoint(){
+        return new Point3D(this.x, this.y, this.z);
     }
 
 

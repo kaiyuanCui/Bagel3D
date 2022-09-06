@@ -7,10 +7,9 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
-public class Object3D {
+public abstract class Object3D {
     protected Point3D pos;
     private List<Object3D> subObjects = new ArrayList<Object3D>();
-    private List<Point> points = new ArrayList<Point>();
 
     public Object3D(Point3D pos) {
         this.pos = pos;
@@ -28,9 +27,11 @@ public class Object3D {
         this.pos = pos;
     }
 
+    /*
+
     public List<Point> getPoints(Camera camera, double screenWidth, double screenHeight){
         double screenDist = (screenWidth /2 )/ Math.tan(camera.getFov()/2);
-        points = new ArrayList<Point>();
+        List<Point> points = new ArrayList<Point>();
          // Object3D temp = this.rotateAroundZ(camera.gethAngle()); // rotates everything about the z axis (not about the camera)
 
         Vector3 ray = pos.toVector().subtract(camera.getCameraPos().toVector()); // cast a ray from camera to the point
@@ -47,7 +48,7 @@ public class Object3D {
         ver = ver*Math.cos(camera.gethAngle()) + hor*Math.sin(camera.gethAngle());
         hor = hor*Math.cos(camera.gethAngle()) - ver*Math.sin(camera.gethAngle());
 
-         */
+
 
 
         if (ray.x <= 0){
@@ -66,22 +67,23 @@ public class Object3D {
         return points;
     }
 
-    public void drawObject(){
-        Drawing object = new Drawing();
+     */
 
-        // draw a line between every pair of points (for now)
-        for(Point p1: points){
-            for(Point p2: points){
-                object.drawLine(p1, p2, 1, new Colour(0,0,0));
-            }
+
+
+
+    public void draw(Camera camera, double screenWidth, double screenHeight){
+        for(Object3D object: subObjects){
+            object.draw(camera, screenWidth, screenHeight);
         }
 
     }
 
+    /*
     public Object3D rotateAroundZ(double angle){  //clockwise
 
         // create a copy of the object to rotate to avoid continuous transformation to it, which deforms it.
-        Object3D rotated = new Object3D(pos);
+        Object3D rotated = this.clone();
         rotated.setPos(new Point3D(pos.x*Math.cos(angle) - pos.y*Math.sin(angle),
                                     pos.y*Math.cos(angle) + pos.x*Math.sin(angle),
                                         pos.z));
@@ -92,6 +94,8 @@ public class Object3D {
         }
         return rotated;
     }
+
+     */
 
 
 }

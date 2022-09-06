@@ -26,4 +26,23 @@ public class Point3D {
     }
 
 
+    /**
+     *
+     * @param another Another point
+     * @return A Vector3 from this point to another
+     */
+    public Vector3 vectorTo(Point3D another){
+        return another.toVector().subtract(this.toVector());
+    }
+
+    /**
+     * 
+     * @param another Another point
+     * @return The distance from this point to another point.
+     */
+    public double distanceTo(Point3D another){
+        return vectorTo(another).len();
+        
+    }
+
 }

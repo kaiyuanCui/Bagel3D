@@ -30,14 +30,28 @@ public class Rectangle3D extends Object3D{
 
         Vector3[] directions = {new Vector3(0,0,0), new Vector3(width, 0 ,0), new Vector3(width, height, 0), new Vector3(0,height,0 )};
 
+
         for (int i = 0; i<4; i++){
-            vertices[i] = new Point3D(pos.toVector().add(directions[i]));
+            vertices[i] = new Point3D(pos.toVector().add(directions[i].rotate(rotation)));
         }
 
 
     }
 
+    public Rectangle3D(Point3D v0, Point3D v1, Point3D v2,Point3D v3) {
+        super(v0.toVector().add(v0.vectorTo(v3).divide(2)).toPoint());
+        this.width = v0.distanceTo(v1);
+        this.height = v0.distanceTo(v3);
 
+
+        vertices[0] = v0;
+        vertices[1] = v1;
+        vertices[2] = v2;
+        vertices[3] = v3;
+    }
+
+
+    @Override
     public void draw(Camera camera, double screenWidth, double screenHeight){
         // everything here is constant, compute beforehand?
         double screenDist = (screenWidth /2 )/ Math.tan(camera.getFov()/2);
@@ -51,6 +65,7 @@ public class Rectangle3D extends Object3D{
             // cast a ray from camera to the point
             Vector3 ray = vertices[i].toVector().subtract(camera.getCameraPos().toVector());
             ray = ray.rotateAroundZ(camera.gethAngle());
+            ray = ray.rotateAroundY(camera.getvAngle());
 
             // point is behind player
             if(ray.x > 0){

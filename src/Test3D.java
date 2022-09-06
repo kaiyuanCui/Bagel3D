@@ -38,14 +38,16 @@ public class Test3D extends AbstractGame {
         camera = new Camera(cameraPos, 0, 90);
 
         // for testing purposes only
-        cube = new Cuboid(new Point3D(300, 400 ,300), 600, 60, 600).createObject();
+
+        cube = new Cuboid(new Point3D(300, 400 ,300), 600, 60, 600);
         objects.add(cube);
-        objects.add(new Cuboid(new Point3D(100, 50 ,50), 30, 70, 30).createObject());
-        objects.add(new Cuboid(new Point3D(300, 700 ,300), 120, 100, 100).createObject());
-        objects.add(new Cuboid(new Point3D(900, -50 ,-50), 100, 100, 100).createObject());
-        xAxis = new Cuboid(new Point3D(-5000, 0 ,0), 5000 + camera.getCameraPos().x - 1,0, 0).createObject();
-        yAxis = new Cuboid(new Point3D(0, -5000 ,0), 0, 10000, 0).createObject();
-        zAxis = new Cuboid(new Point3D(0, 0 ,-5000), 0, 0, 10000).createObject();
+
+        objects.add(new Cuboid(new Point3D(100, 50 ,50), 30, 70, 30));
+        objects.add(new Cuboid(new Point3D(300, 700 ,300), 120, 100, 100));
+        objects.add(new Cuboid(new Point3D(900, -50 ,-50), 100, 100, 100));
+        xAxis = new Cuboid(new Point3D(-5000, 0 ,0), 5000 + camera.getCameraPos().x - 1,0, 0);
+        yAxis = new Cuboid(new Point3D(0, -5000 ,0), 0, 10000, 0);
+        zAxis = new Cuboid(new Point3D(0, 0 ,-5000), 0, 0, 10000);
 
 
         //counter = new Frames(System.nanoTime());
@@ -65,6 +67,7 @@ public class Test3D extends AbstractGame {
         fps = Frames.fps();
 
         // draw axis first so they do not obstruct other objects
+        /*
         xAxis = new Cuboid(new Point3D(-5000, 0 ,0), 4999 + camera.getCameraPos().x,0, 0).createObject();
         xAxis.getPoints(camera, Window.getWidth(), Window.getHeight());
         xAxis.drawObject();
@@ -72,6 +75,8 @@ public class Test3D extends AbstractGame {
         yAxis.drawObject();
         zAxis.getPoints(camera, Window.getWidth(), Window.getHeight());
         zAxis.drawObject();
+
+         */
 
 
         // camera movement
@@ -106,6 +111,12 @@ public class Test3D extends AbstractGame {
         if (input.isDown(Keys.RIGHT)){
             camera.hTurn(-1 * turnSpeed);
         }
+        if (input.isDown(Keys.UP)){
+            camera.vTurn(-1 * turnSpeed);
+        }
+        if (input.isDown(Keys.DOWN)){
+            camera.vTurn(turnSpeed);
+        }
 
         cameraPos = new Point3D(cameraPos.toVector().add(move.rotateAroundZ(-1 * camera.gethAngle())));
         camera.setCameraPos(cameraPos);
@@ -117,22 +128,23 @@ public class Test3D extends AbstractGame {
 
         // draw objects
         for (Object3D obj: objects){
-            obj.getPoints(camera, Window.getWidth(), Window.getHeight() );
-            obj.drawObject();
+            obj.draw(camera, Window.getWidth(), Window.getHeight());
         }
 
+        /*
         cube.rotateAroundZ(0.1 );
         cube.getPoints(camera, Window.getWidth(), Window.getHeight());
         cube.drawObject();
 
-        Rectangle3D rect = new Rectangle3D((cube.getPos()), 60, 60, cameraPos.toVector());
-        rect.draw(camera, Window.getWidth(), Window.getHeight());
+         */
+
+        Rectangle3D rect = new Rectangle3D((cube.getPos()), 60, 60, new Vector3(0,0,0));
 
         int length = 100;
         int bigLength = 1000;
         for(int i = 0; i < bigLength; i+=length){
             for(int j = 0; j <= bigLength; j+=length) {
-                rect = new Rectangle3D(new Point3D(j, i, 0), length, length, cameraPos.toVector());
+                rect = new Rectangle3D(new Point3D(j, i, 0), length, length, new Vector3(0,0,0));
                 rect.draw(camera, Window.getWidth(), Window.getHeight());
             }
 
