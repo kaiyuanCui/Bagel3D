@@ -39,7 +39,8 @@ public class Rectangle3D extends Object3D{
     }
 
     public Rectangle3D(Point3D v0, Point3D v1, Point3D v2,Point3D v3) {
-        super(v0.toVector().add(v0.vectorTo(v3).divide(2)).toPoint());
+
+        super(v0.toVector().add(v0.vectorTo(v2).divide(2)).toPoint()); // middle
         this.width = v0.distanceTo(v1);
         this.height = v0.distanceTo(v3);
 
@@ -180,6 +181,20 @@ public class Rectangle3D extends Object3D{
         }
 
         Drawing.drawLine(cast_vertices[3],cast_vertices[0],2, new Colour(0,0,0));
+
+        Vector3 ray = pos.toVector().subtract(camera.getCameraPos().toVector());
+        ray = ray.rotateAroundZ(camera.gethAngle());
+        ray = ray.rotateAroundY(camera.getvAngle());
+
+        // point is behind player
+        if(ray.x > 0){
+            return;
+        }
+
+        // coordinates of the ray projected on a screen
+        double ver = ray.z/ray.x * screenDist + screenHeight/2;
+        double hor = ray.y/ray.x * screenDist + screenWidth/2;
+        Drawing.drawCircle(new Point(hor, ver),5, new Colour(1, 0,0));
 
 
 

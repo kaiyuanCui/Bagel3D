@@ -4,12 +4,13 @@ import bagel.util.Colour;
 import bagel.util.Point;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
 
-public abstract class Object3D {
+public class Object3D implements Comparable<Object3D>{
     protected Point3D pos;
-    private List<Object3D> subObjects = new ArrayList<Object3D>();
+    protected List<Object3D> subObjects = new ArrayList<Object3D>();
 
     public Object3D(Point3D pos) {
         this.pos = pos;
@@ -69,10 +70,13 @@ public abstract class Object3D {
 
      */
 
-
+    public void sort(){
+        Collections.sort(subObjects);
+    }
 
 
     public void draw(Camera camera, double screenWidth, double screenHeight){
+
         for(Object3D object: subObjects){
             object.draw(camera, screenWidth, screenHeight);
         }
@@ -96,6 +100,18 @@ public abstract class Object3D {
     }
 
      */
+
+
+    @Override
+    public int compareTo(Object3D o) {
+        Point3D player = Test3D.getCameraPos();
+        // the return values are reversed: < if further away
+        if (Math.abs(this.pos.distanceTo(player)) > Math.abs(o.getPos().distanceTo(player))){
+            return -1;
+        }
+
+        return 1;
+    }
 
 
 }

@@ -9,12 +9,15 @@ import java.util.concurrent.TimeUnit;
 
 
 public class Test3D extends AbstractGame {
-    private Point3D cameraPos;
+    private static Point3D cameraPos = new Point3D(500, 400, 300);
     private Camera camera;
 
     private Object3D cube;
 
     private List<Object3D> objects = new ArrayList<Object3D>();
+
+    private static Object3D world = new Object3D(new Point3D(0,0,0));
+
 
     private Object3D xAxis;
     private Object3D yAxis;
@@ -34,7 +37,7 @@ public class Test3D extends AbstractGame {
     public Test3D() {
         super(1280, 720, "Bagel3D");
 
-        cameraPos = new Point3D(500, 400, 300);
+
         camera = new Camera(cameraPos, 0, 90);
 
         // for testing purposes only
@@ -126,10 +129,7 @@ public class Test3D extends AbstractGame {
         }
 
 
-        // draw objects
-        for (Object3D obj: objects){
-            obj.draw(camera, Window.getWidth(), Window.getHeight());
-        }
+
 
         /*
         cube.rotateAroundZ(0.1 );
@@ -138,16 +138,20 @@ public class Test3D extends AbstractGame {
 
          */
 
-        Rectangle3D rect = new Rectangle3D((cube.getPos()), 60, 60, new Vector3(0,0,0));
-
         int length = 100;
         int bigLength = 1000;
         for(int i = 0; i < bigLength; i+=length){
             for(int j = 0; j <= bigLength; j+=length) {
-                rect = new Rectangle3D(new Point3D(j, i, 0), length, length, new Vector3(0,0,0));
-                rect.draw(camera, Window.getWidth(), Window.getHeight());
+
+                new Rectangle3D(new Point3D(j, i, 0), length, length, new Vector3(0,0,0)).draw(camera, Window.getWidth(), Window.getHeight());
             }
 
+        }
+
+        // draw objects
+       //world.draw(camera, Window.getWidth(), Window.getHeight());
+        for(Object3D object: objects){
+            object.draw(camera, Window.getWidth(), Window.getHeight());
         }
 
 
@@ -155,5 +159,7 @@ public class Test3D extends AbstractGame {
         defaultFont.drawString("FPS: " + fps, 20, 50);
     }
 
-
+    public static Point3D getCameraPos() {
+        return cameraPos;
+    }
 }
