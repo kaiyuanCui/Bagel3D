@@ -18,6 +18,7 @@ public class Rectangle3D extends Object3D{
 
     private final int lineWidth = 10;  // the width of the lines used to fill in the rectangles,
                                         // wider = better performance, but less visual quality
+    private Colour colour;
 
     // debug only
     private final Colour DEBUG = new Colour(0.1, 0.5, 0, 1);
@@ -27,7 +28,7 @@ public class Rectangle3D extends Object3D{
         this.width = width;
         this.height = height;
         this.rotation = rotation;
-
+        this.colour = DEBUG;
         Vector3[] directions = {new Vector3(0,0,0), new Vector3(width, 0 ,0), new Vector3(width, height, 0), new Vector3(0,height,0 )};
 
 
@@ -37,6 +38,8 @@ public class Rectangle3D extends Object3D{
 
 
     }
+
+
 
     public Rectangle3D(Point3D v0, Point3D v1, Point3D v2,Point3D v3) {
 
@@ -52,9 +55,11 @@ public class Rectangle3D extends Object3D{
     }
 
 
-    @Override
-    public void draw(Camera camera, double screenWidth, double screenHeight){
-        // everything here is constant, compute beforehand?
+    public void setColour(Colour colour) {
+        this.colour = colour;
+    }
+
+    public Point[] castVertices(Camera camera, double screenWidth, double screenHeight){
         double screenDist = (screenWidth /2 )/ Math.tan(camera.getFov()/2);
 
         // points outside the screen
@@ -70,7 +75,7 @@ public class Rectangle3D extends Object3D{
 
             // point is behind player
             if(ray.x > 0){
-                return;
+                return cast_vertices;
             }
 
             // coordinates of the ray projected on a screen
@@ -83,14 +88,30 @@ public class Rectangle3D extends Object3D{
             if(ver < 0|| ver > screenHeight || hor < 0  || hor > screenWidth){
                 out++;
                 if(out == 4){
-                    return;
+                    return cast_vertices;
                 }
             }
 
             cast_vertices[i] = new Point(hor, ver);
 
         }
+        return cast_vertices;
 
+    }
+
+
+    @Override
+    public void draw(Camera camera, double screenWidth, double screenHeight){
+        // everything here is constant, compute beforehand?
+        double screenDist = (screenWidth /2 )/ Math.tan(camera.getFov()/2);
+
+        // points outside the screen
+        int out = 0;
+
+        Point[] cast_vertices = castVertices(camera, screenWidth, screenHeight);
+        if (cast_vertices[3] == null){ // return early if the rectangle should not be drawn (could be optimised)
+            return;
+        }
 
 
         /*
@@ -194,7 +215,7 @@ public class Rectangle3D extends Object3D{
         // coordinates of the ray projected on a screen
         double ver = ray.z/ray.x * screenDist + screenHeight/2;
         double hor = ray.y/ray.x * screenDist + screenWidth/2;
-        Drawing.drawCircle(new Point(hor, ver),5, new Colour(1, 0,0));
+        Drawing.drawCircle(new Point(hor, ver),2, new Colour(1, 0,0));
 
 
 

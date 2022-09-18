@@ -1,6 +1,7 @@
 
 
 import bagel.*;
+import bagel.util.Colour;
 import bagel.util.Point;
 
 import java.util.ArrayList;
@@ -10,7 +11,7 @@ import java.util.concurrent.TimeUnit;
 
 
 public class Test3D extends AbstractGame {
-    private static Point3D cameraPos = new Point3D(1500, 1400, 700);
+    private static Point3D cameraPos = new Point3D(0, 0, 700);
     private Camera camera;
 
     private static Point mousePos = new Point(0, 0);
@@ -46,7 +47,7 @@ public class Test3D extends AbstractGame {
         camera = new Camera(cameraPos, 145, 90);
 
         // for testing purposes only
-
+        /*
         cube = new Cuboid(new Point3D(300, 400 ,300), 600, 60, 600);
         world.addObject(cube);
 
@@ -57,8 +58,12 @@ public class Test3D extends AbstractGame {
         yAxis = new Cuboid(new Point3D(0, -5000 ,0), 0, 10000, 0);
         zAxis = new Cuboid(new Point3D(0, 0 ,-5000), 0, 0, 10000);
 
+         */
+
+
+        // world generation
         int length = 100;
-        int bigLength = 3000;
+        int bigLength = 10000;
         for(int i = 0; i < bigLength; i+=length){
             for(int j = 0; j <= bigLength; j+=length) {
 
@@ -66,10 +71,10 @@ public class Test3D extends AbstractGame {
             }
 
         }
-
+        world.addObject(new Image3D(new Point3D(0, 0, 200), "res/sinkhole.png"));
 
         //counter = new Frames(System.nanoTime());
-        defaultFont = new Font("res/conformable.otf", 99 );
+        defaultFont = new Font("res/conformable.otf", 40 );
 
     }
 
@@ -180,6 +185,13 @@ public class Test3D extends AbstractGame {
 
         defaultFont.drawString("FPS: " + fps, 20, 50);
         defaultFont.drawString("POS: " + cameraPos, 20, 100 );
+
+
+        // crosshair
+        Drawing.drawLine(new Point(Window.getWidth()/2 -15, Window.getHeight()/2),
+                new Point(Window.getWidth()/2 +15, Window.getHeight()/2), 1, new Colour(0,0,0));
+        Drawing.drawLine(new Point(Window.getWidth()/2 , Window.getHeight()/2 - 15),
+                new Point(Window.getWidth()/2 , Window.getHeight()/2 + 15), 1, new Colour(0,0,0));
     }
 
     public static Point3D getCameraPos() {

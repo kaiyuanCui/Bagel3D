@@ -45,6 +45,11 @@ public class Point3D {
         
     }
 
+    public Point3D midPoint(Point3D another){
+        Vector3 v = vectorTo(another);
+        return  this.toVector().add(v.divide(2)).toPoint();
+    }
+
     @Override
     public String toString(){
         return "(" + x + ", " + y + ", " + z +")";
