@@ -1,6 +1,7 @@
 
 
 import bagel.Drawing;
+import bagel.Font;
 import bagel.util.Colour;
 import bagel.util.Point;
 import bagel.util.Vector2;
@@ -19,9 +20,12 @@ public class Rectangle3D extends Object3D{
     private final int lineWidth = 10;  // the width of the lines used to fill in the rectangles,
                                         // wider = better performance, but less visual quality
     private Colour colour;
+    private static final Font defaultFont = new Font("res/conformable.otf", 20 );; // used to debug
+
 
     // debug only
     private final Colour DEBUG = new Colour(0.1, 0.5, 0, 1);
+    private static final Vector3 DEFAULT_LIGHT_SOURCE = new Vector3(1,2,5);
 
     public Rectangle3D(Point3D pos, double width, double height, Vector3 rotation) {
         super(pos);
@@ -46,7 +50,7 @@ public class Rectangle3D extends Object3D{
         super(v0.toVector().add(v0.vectorTo(v2).divide(2)).toPoint()); // middle
         this.width = v0.distanceTo(v1);
         this.height = v0.distanceTo(v3);
-
+        this.colour = DEBUG;
 
         vertices[0] = v0;
         vertices[1] = v1;
@@ -102,16 +106,33 @@ public class Rectangle3D extends Object3D{
 
     @Override
     public void draw(Camera camera, double screenWidth, double screenHeight){
+        draw(camera, screenWidth, screenHeight, DEFAULT_LIGHT_SOURCE);
+    }
+
+    public void draw(Camera camera, double screenWidth, double screenHeight, Vector3 lightSourceDirection){
         // everything here is constant, compute beforehand?
         double screenDist = (screenWidth /2 )/ Math.tan(camera.getFov()/2);
 
-        // points outside the screen
-        int out = 0;
 
         Point[] cast_vertices = castVertices(camera, screenWidth, screenHeight);
-        if (cast_vertices[3] == null){ // return early if the rectangle should not be drawn (could be optimised)
+        if (cast_vertices[3] == null){ // return early if the rectangle should not be drawn
             return;
         }
+
+
+
+        // how much the normal is projected in the direction of the light source (might be better using angles instead)
+        double light = vertices[1].toVector().subtract(vertices[0].toVector()).
+                cross(vertices[3].toVector().subtract(vertices[0].toVector())).unitVector().
+                projectionLength(lightSourceDirection) ;
+        System.out.println(vertices[1].toVector().subtract(vertices[0].toVector()).
+                cross(vertices[3].toVector().subtract(vertices[0].toVector())).unitVector());
+        double environmentalLight = 0.5; // change to a constant later
+        Colour drawColour = new Colour(colour.r * (environmentalLight  + (1 - environmentalLight) * light) ,
+                colour.g * (environmentalLight  + (1 - environmentalLight) * light),
+                colour.b * (environmentalLight  + (1 - environmentalLight) * light));
+
+
 
 
         /*
@@ -139,13 +160,13 @@ public class Rectangle3D extends Object3D{
 
 
         for (int s = 0; s < topLen; s+=lineWidth){
-            Drawing.drawLine(cast_vertices[0].asVector().add(cast_top_dir.mul(s)).asPoint(),cast_vertices[2],lineWidth, DEBUG);
+            Drawing.drawLine(cast_vertices[0].asVector().add(cast_top_dir.mul(s)).asPoint(),cast_vertices[2],lineWidth, drawColour);
             // rectangle.drawLine(cast_vertices[2].asVector().add(cast_y_dir.normalised().mul(s)).asPoint(),cast_vertices[0],2, DEBUG);
             // rectangle.drawLine(cast_vertices[1].asVector().add(cast_x_dir.normalised().mul(s)).asPoint(),cast_vertices[2],2, DEBUG);
         }
 
         for (int j = 0; j < rgtLen; j+=lineWidth){
-            Drawing.drawLine(cast_vertices[0].asVector().add(cast_rgt_dir.mul(j)).asPoint(),cast_vertices[2],lineWidth, DEBUG);
+            Drawing.drawLine(cast_vertices[0].asVector().add(cast_rgt_dir.mul(j)).asPoint(),cast_vertices[2],lineWidth, drawColour);
         }
 
 
@@ -215,8 +236,8 @@ public class Rectangle3D extends Object3D{
         // coordinates of the ray projected on a screen
         double ver = ray.z/ray.x * screenDist + screenHeight/2;
         double hor = ray.y/ray.x * screenDist + screenWidth/2;
-        Drawing.drawCircle(new Point(hor, ver),2, new Colour(1, 0,0));
-
+        // Drawing.drawCircle(new Point(hor, ver),2, new Colour(1, 0,0)); // draws the pos as a dot
+        // defaultFont.drawString(String.valueOf(light),hor, ver); // displays the amount of light reflected
 
 
 

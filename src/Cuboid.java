@@ -6,7 +6,7 @@ public class Cuboid extends Object3D implements Comparable<Object3D>{
     private double zLen;
 
     private Point3D[] v = new Point3D[8];
-    private static final int[][] SIDES = {{4, 6, 7, 5}, {6, 2, 3, 7}, {2, 0, 1, 3}, {0, 4, 5, 1}, {5, 7, 3, 1}, {4, 6, 2, 0}};
+    private static final int[][] SIDES = {{4, 6, 7, 5}, {6, 2, 3, 7}, {2, 0, 1, 3}, {0, 4, 5, 1}, {5, 7, 3, 1}, {0, 2, 6, 4}};
 
 
     public Cuboid(Point3D pos, double xLen, double yLen, double zLen) {

@@ -105,6 +105,7 @@ public class Object3D implements Comparable<Object3D>{
 
     @Override
     public int compareTo(Object3D o) {
+        // I need a better algorithm for this
         Point3D player = Test3D.getCameraPos();
         // the return values are reversed: < if further away
         if (Math.abs(this.pos.distanceTo(player)) > Math.abs(o.getPos().distanceTo(player))){

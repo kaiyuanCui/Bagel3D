@@ -26,6 +26,48 @@ public class Vector3 {
         return new Vector3(x/scalar, y/scalar, z/scalar);
     }
 
+    /**
+     *
+     * @param another
+     * @return The cross product (this x another)
+     */
+    public Vector3 cross(Vector3 another){
+        return new Vector3(y* another.z - z* another.y,
+                            z*another.x - x* another.z,
+                                x*another.y - y*another.x);
+        // u x v = (u2v3 - u3v2) i + (u3v1 - u1v3) j + (u1v2 - u2v1)k
+
+    }
+
+    /**
+     *
+     * @param another
+     * @return The dot product of the two vectors
+     */
+    public double dot(Vector3 another){
+        return x*another.x + y*another.y + z*another.z;
+    }
+
+    /**
+     *
+     * @param another
+     * @return The length of this vector when projected onto another vector
+     */
+    public double projectionLength(Vector3 another){
+        return another.unitVector().dot(this);
+    }
+
+    /**
+     *
+     * @param another
+     * @return The projection of this vector onto another vector
+     */
+    public Vector3 projectionOnto(Vector3 another){
+        Vector3 unit = another.unitVector();
+        return unit.multiply(unit.dot(this));
+    }
+
+
 
 
     public double len(){
@@ -33,8 +75,7 @@ public class Vector3 {
     }
 
     public Vector3 unitVector(){
-        double len = this.len();
-        return new Vector3(x/len, y/len, z/len);
+        return this.divide(this.len());
     }
 
     public Vector3 toLenOf(double scalar){
@@ -69,6 +110,11 @@ public class Vector3 {
 
     public Point3D toPoint(){
         return new Point3D(this.x, this.y, this.z);
+    }
+
+    @Override
+    public String toString(){
+        return "(" + x + ", " + y + ", " + z + ")";
     }
 
 
