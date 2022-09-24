@@ -24,8 +24,8 @@ public class Rectangle3D extends Object3D{
 
 
     // debug only
-    private final Colour DEBUG = new Colour(0.1, 0.5, 0, 1);
-    private static final Vector3 DEFAULT_LIGHT_SOURCE = new Vector3(1,2,5);
+    private final Colour DEBUG = new Colour(0.8, 0.8, 0.8, 1);
+
 
     public Rectangle3D(Point3D pos, double width, double height, Vector3 rotation) {
         super(pos);
@@ -103,12 +103,14 @@ public class Rectangle3D extends Object3D{
 
     }
 
-
     @Override
-    public void draw(Camera camera, double screenWidth, double screenHeight){
-        draw(camera, screenWidth, screenHeight, DEFAULT_LIGHT_SOURCE);
-    }
-
+    /**
+     * Draws the rectangle given the direction of the light source
+     * @param camera
+     * @param screenWidth
+     * @param screenHeight
+     * @param lightSourceDirection
+     */
     public void draw(Camera camera, double screenWidth, double screenHeight, Vector3 lightSourceDirection){
         // everything here is constant, compute beforehand?
         double screenDist = (screenWidth /2 )/ Math.tan(camera.getFov()/2);
@@ -125,12 +127,12 @@ public class Rectangle3D extends Object3D{
         double light = vertices[1].toVector().subtract(vertices[0].toVector()).
                 cross(vertices[3].toVector().subtract(vertices[0].toVector())).unitVector().
                 projectionLength(lightSourceDirection) ;
-        System.out.println(vertices[1].toVector().subtract(vertices[0].toVector()).
-                cross(vertices[3].toVector().subtract(vertices[0].toVector())).unitVector());
-        double environmentalLight = 0.5; // change to a constant later
+
+        double environmentalLight = 0.2; // change to a constant later
         Colour drawColour = new Colour(colour.r * (environmentalLight  + (1 - environmentalLight) * light) ,
                 colour.g * (environmentalLight  + (1 - environmentalLight) * light),
-                colour.b * (environmentalLight  + (1 - environmentalLight) * light));
+                colour.b * (environmentalLight  + (1 - environmentalLight) * light),
+                2.5 - camera.getCameraPos().distanceTo(pos)/500); // distance fog, only looks good when on ground
 
 
 
@@ -219,10 +221,10 @@ public class Rectangle3D extends Object3D{
 
         // draw an outline of the rectangle
         for(int i = 0; i < 3; i++){
-            Drawing.drawLine(cast_vertices[i],cast_vertices[i+1],2, new Colour(0,0,0));
+            Drawing.drawLine(cast_vertices[i],cast_vertices[i+1],2, new Colour(0,0,0, drawColour.a));
         }
 
-        Drawing.drawLine(cast_vertices[3],cast_vertices[0],2, new Colour(0,0,0));
+        Drawing.drawLine(cast_vertices[3],cast_vertices[0],2, new Colour(0,0,0, drawColour.a));
 
         Vector3 ray = pos.toVector().subtract(camera.getCameraPos().toVector());
         ray = ray.rotateAroundZ(camera.gethAngle());

@@ -63,7 +63,7 @@ public class Test3D extends AbstractGame {
 
         // world generation
         int length = 100;
-        int bigLength = 1000;
+        int bigLength = 10000;
         for(int i = 0; i < bigLength; i+=length){
             for(int j = 0; j <= bigLength; j+=length) {
 
@@ -93,12 +93,11 @@ public class Test3D extends AbstractGame {
 
     @Override
     public void update(Input input) {
+
         fps = Frames.fps();
-        frameCounter++;
-        if (frameCounter > 10){
-            world.sort();
-            frameCounter = 0;
-        }
+
+
+
 
         // draw axis first so they do not obstruct other objects
         /*
@@ -179,7 +178,7 @@ public class Test3D extends AbstractGame {
 
 
         // draw objects
-       world.draw(camera, Window.getWidth(), Window.getHeight());
+       world.draw(camera, Window.getWidth(), Window.getHeight(), cameraPos);
         /*
         for(Object3D object: objects){
             object.draw(camera, Window.getWidth(), Window.getHeight());

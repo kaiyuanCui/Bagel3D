@@ -28,6 +28,8 @@ public class Object3D implements Comparable<Object3D>{
         this.pos = pos;
     }
 
+    private static final Vector3 DEFAULT_LIGHT_SOURCE = new Vector3(1,2,5);
+
     /*
 
     public List<Point> getPoints(Camera camera, double screenWidth, double screenHeight){
@@ -74,12 +76,38 @@ public class Object3D implements Comparable<Object3D>{
         Collections.sort(subObjects);
     }
 
+    /**
+     * Draws the object with the Default light source direction
+     * @param camera
+     * @param screenWidth
+     * @param screenHeight
+     */
 
     public void draw(Camera camera, double screenWidth, double screenHeight){
+        draw(camera, screenWidth, screenHeight, DEFAULT_LIGHT_SOURCE);
+    }
+
+    /**
+     * Draws the object with a given light source
+     * @param camera
+     * @param screenWidth
+     * @param screenHeight
+     * @param lightSource
+     */
+    public void draw(Camera camera, double screenWidth, double screenHeight, Point3D lightSource){
         int renderSize = 256;
         sort();
         for(Object3D object: subObjects.subList(Math.max(0, subObjects.size() - renderSize), subObjects.size())){
-            object.draw(camera, screenWidth, screenHeight);
+            object.draw(camera, screenWidth, screenHeight, object.pos.vectorTo(lightSource));
+        }
+    }
+
+
+    public void draw(Camera camera, double screenWidth, double screenHeight, Vector3 lightSourceDirection){
+        int renderSize = 256;
+        sort();
+        for(Object3D object: subObjects.subList(Math.max(0, subObjects.size() - renderSize), subObjects.size())){
+            object.draw(camera, screenWidth, screenHeight, lightSourceDirection);
         }
 
     }
@@ -105,9 +133,19 @@ public class Object3D implements Comparable<Object3D>{
 
     @Override
     public int compareTo(Object3D o) {
+        /*
+        if (subObjects.size() > 0){
+            if(o.subObjects.size() > 0){
+                return Collections.max(subObjects).compareTo(Collections.max(o.subObjects));
+            }
+        }
+
+         */
+
         // I need a better algorithm for this
         Point3D player = Test3D.getCameraPos();
         // the return values are reversed: < if further away
+
         if (Math.abs(this.pos.distanceTo(player)) > Math.abs(o.getPos().distanceTo(player))){
             return -1;
         }
