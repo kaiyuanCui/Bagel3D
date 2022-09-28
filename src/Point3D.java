@@ -1,5 +1,6 @@
-
-import org.lwjgl.system.CallbackI;
+/**
+ *  Class to represent a Point in 3D space.
+ */
 
 public class Point3D {
     public double x,y,z;

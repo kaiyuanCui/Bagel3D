@@ -1,5 +1,7 @@
 
 import java.lang.Math;
+
+
 public class Camera {
     private Point3D cameraPos;
     private double hAngle;
@@ -7,10 +9,10 @@ public class Camera {
     private double vAngle;
     private double fov;
 
-    public Camera(Point3D cameraPos, float angle, float fov) {
+    public Camera(Point3D cameraPos, float hAngle, float vAngle, float fov) {
         this.cameraPos = cameraPos;
-        this.hAngle = Math.toRadians(angle);
-        this.vAngle = Math.toRadians(angle);
+        this.hAngle = Math.toRadians(hAngle);
+        this.vAngle = Math.toRadians(vAngle);
         this.fov = Math.toRadians(fov);
     }
 
@@ -31,7 +33,17 @@ public class Camera {
         hAngle += Math.toRadians(angle);
     }
     public void vTurn(double angle){
-        vAngle += Math.toRadians(angle);
+        double target = vAngle + Math.toRadians(angle);
+        if (target > Math.PI/2){
+            vAngle = Math.PI/2;
+        }
+        else if (target < - Math.PI/2){
+            vAngle = - Math.PI/2;
+        }
+        else
+        {
+            vAngle = target;
+        }
     }
 
     public double getFov() {

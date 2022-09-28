@@ -20,12 +20,8 @@ public class Test3D extends AbstractGame {
 
     private List<Object3D> objects = new ArrayList<Object3D>();
 
-    private static Object3D world = new Object3D(new Point3D(0,0,0));
-
-
-    private Object3D xAxis;
-    private Object3D yAxis;
-    private Object3D zAxis;
+    private static ComplexObject world = new ComplexObject(new Point3D(0, 0, 0)) {
+    };
 
 
 
@@ -44,21 +40,8 @@ public class Test3D extends AbstractGame {
         super(1280, 720, "Bagel3D");
 
 
-        camera = new Camera(cameraPos, 145, 90);
+        camera = new Camera(cameraPos, 135, -45,  90);
 
-        // for testing purposes only
-        /*
-        cube = new Cuboid(new Point3D(300, 400 ,300), 600, 60, 600);
-        world.addObject(cube);
-
-        world.addObject(new Cuboid(new Point3D(100, 50 ,50), 30, 70, 30));
-        world.addObject(new Cuboid(new Point3D(300, 700 ,300), 120, 100, 100));
-        world.addObject(new Cuboid(new Point3D(900, -50 ,-50), 100, 100, 100));
-        xAxis = new Cuboid(new Point3D(-5000, 0 ,0), 5000 + camera.getCameraPos().x - 1,0, 0);
-        yAxis = new Cuboid(new Point3D(0, -5000 ,0), 0, 10000, 0);
-        zAxis = new Cuboid(new Point3D(0, 0 ,-5000), 0, 0, 10000);
-
-         */
 
 
         // world generation
@@ -95,21 +78,6 @@ public class Test3D extends AbstractGame {
     public void update(Input input) {
 
         fps = Frames.fps();
-
-
-
-
-        // draw axis first so they do not obstruct other objects
-        /*
-        xAxis = new Cuboid(new Point3D(-5000, 0 ,0), 4999 + camera.getCameraPos().x,0, 0).createObject();
-        xAxis.getPoints(camera, Window.getWidth(), Window.getHeight());
-        xAxis.drawObject();
-        yAxis.getPoints(camera, Window.getWidth(), Window.getHeight());
-        yAxis.drawObject();
-        zAxis.getPoints(camera, Window.getWidth(), Window.getHeight());
-        zAxis.drawObject();
-
-         */
 
 
         // camera movement
@@ -190,6 +158,7 @@ public class Test3D extends AbstractGame {
 
         defaultFont.drawString("FPS: " + fps, 20, 50);
         defaultFont.drawString("POS: " + cameraPos, 20, 100 );
+        defaultFont.drawString("Facing: h:" + camera.gethAngle() + ", v: " + camera.getvAngle(), 20, 150);
 
 
         // crosshair

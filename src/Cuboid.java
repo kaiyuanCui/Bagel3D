@@ -1,6 +1,7 @@
-import java.util.Collections;
-
-public class Cuboid extends Object3D implements Comparable<Object3D>{
+/**
+ *  Class to represent cuboids
+ */
+public class Cuboid extends ComplexObject{
     private double xLen;
     private double yLen;
     private double zLen;
@@ -47,14 +48,6 @@ public class Cuboid extends Object3D implements Comparable<Object3D>{
 
     }
 
-    @Override
-    public void draw(Camera camera, double screenWidth, double screenHeight){
-        Collections.sort(subObjects);
-        for(Object3D object: subObjects.subList(3, 6)){
-            object.draw(camera, screenWidth, screenHeight);
-        }
-
-    }
 
 
 

@@ -4,6 +4,9 @@ import bagel.util.Colour;
 import bagel.util.Point;
 import bagel.util.Vector2;
 
+/**
+ *  Class to draw an image in 3D space
+ */
 public class Image3D extends Object3D{
     private Image image;
     private Rectangle3D rect;
@@ -28,7 +31,7 @@ public class Image3D extends Object3D{
         return new Rectangle3D(pos, width, height, rotation);
     }
 
-    @Override
+
     public void draw(Camera camera, double screenWidth, double screenHeight) {
         Point[] cast_vertices = rect.castVertices(camera, screenWidth, screenHeight);
         if (cast_vertices[3] == null){
