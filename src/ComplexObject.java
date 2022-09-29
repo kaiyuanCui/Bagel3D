@@ -8,7 +8,7 @@ import java.util.List;
 public class ComplexObject extends Object3D{
 
     protected List<Object3D> subObjects = new ArrayList<Object3D>(); // change this to simple
-    private static int renderSize = 256;
+    private int renderSize = 256;
 
     public ComplexObject(Point3D pos) {
         super(pos);
@@ -16,6 +16,10 @@ public class ComplexObject extends Object3D{
 
     public void addObject(Object3D newObj){
         subObjects.add(newObj);
+    }
+
+    public void mergeObject(ComplexObject newObj){
+        subObjects.addAll(newObj.subObjects);
     }
 
     public void sort(){
@@ -33,6 +37,7 @@ public class ComplexObject extends Object3D{
     public void draw(Camera camera, double screenWidth, double screenHeight, Point3D lightSource){
         sort();
         for(Object3D object: subObjects.subList(Math.max(0, subObjects.size() - renderSize), subObjects.size())){
+
             object.draw(camera, screenWidth, screenHeight, object.pos.vectorTo(lightSource));
         }
     }
@@ -52,5 +57,26 @@ public class ComplexObject extends Object3D{
             object.draw(camera, screenWidth, screenHeight, lightSourceDirection);
         }
 
+    }
+
+    public void setRenderSize(int renderSize) {
+        this.renderSize = renderSize;
+    }
+
+    /**
+     * Overrides the method in Object3D
+     * @param point
+     * @return the distance of its closet subobject to the point
+     */
+    @Override
+    public double distanceTo(Point3D point) {
+        double min = Double.MAX_VALUE;
+        for (Object3D o: subObjects){
+            double currDis = o.distanceTo(point);
+            if ( currDis < min){
+                min = currDis;
+            }
+        }
+        return min;
     }
 }

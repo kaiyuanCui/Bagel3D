@@ -59,5 +59,25 @@ public class SimpleObject extends Object3D {
 
     }
 
+    /**
+     * Overrides the method in Object3D
+     * @param point
+     * @return the distance of its closet vertex to the point
+     */
+    @Override
+    public double distanceTo(Point3D point) {
+        //double min = Double.MAX_VALUE;
+        double sum = 0;
+        for (Point3D v: vertices){
+            double currDis = v.distanceTo(point);
+            sum += currDis;
+            /*
+            if ( currDis < min){
+                min = currDis;
+            }
 
+             */
+        }
+        return sum/NUM_VERTICES;
+    }
 }

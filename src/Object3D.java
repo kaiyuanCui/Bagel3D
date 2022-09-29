@@ -41,7 +41,7 @@ public abstract class Object3D implements Comparable<Object3D>{
      * @param lightSource
      */
     public void draw(Camera camera, double screenWidth, double screenHeight, Point3D lightSource){
-
+        // do nothing
     }
 
     /**
@@ -53,26 +53,27 @@ public abstract class Object3D implements Comparable<Object3D>{
      */
 
     public void draw(Camera camera, double screenWidth, double screenHeight, Vector3 lightSourceDirection){
-
+        // do nothing
     }
 
+    /**
+     *
+     * @param point
+     * @return the distance of the object to the point
+     */
+    public double distanceTo(Point3D point){
+        return pos.distanceTo(point);
+    }
 
     @Override
     public int compareTo(Object3D o) {
-        /*
-        if (subObjects.size() > 0){
-            if(o.subObjects.size() > 0){
-                return Collections.max(subObjects).compareTo(Collections.max(o.subObjects));
-            }
-        }
-
-         */
-
-        // I need a better algorithm for this
+        // need a more elegant solution for this?
         Point3D player = Test3D.getCameraPos();
-        // the return values are reversed: < if further away
 
-        if (Math.abs(this.pos.distanceTo(player)) > Math.abs(o.getPos().distanceTo(player))){
+        // difference of their distances, this further away -> negative
+        // return (int) (o.distanceTo(player) - this.distanceTo(player));
+
+        if (this.distanceTo(player) > o.distanceTo(player)){
             return -1;
         }
 

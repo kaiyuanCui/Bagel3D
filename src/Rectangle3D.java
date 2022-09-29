@@ -137,7 +137,7 @@ public class Rectangle3D extends SimpleObject{
         double ver = ray.z/ray.x * screenDist + screenHeight/2;
         double hor = ray.y/ray.x * screenDist + screenWidth/2;
         // Drawing.drawCircle(new Point(hor, ver),2, new Colour(1, 0,0)); // draws the pos as a dot
-        // defaultFont.drawString(String.valueOf(light),hor, ver); // displays the amount of light reflected
+        //defaultFont.drawString(String.valueOf(distanceTo(Test3D.getCameraPos())),hor, ver);
 
 
 
