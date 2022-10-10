@@ -1,13 +1,19 @@
 
 
+import Bagel3D.*;
+import Bagel3D.util.Point3D;
+import Bagel3D.util.Vector3;
 import bagel.*;
 import bagel.util.Colour;
 import bagel.util.Point;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.concurrent.TimeUnit;
 
+/**
+ *  Class to test the features of Bagel3D
+ *  @author kaiyuanCui
+ */
 
 
 public class Test3D extends AbstractGame {
@@ -39,8 +45,9 @@ public class Test3D extends AbstractGame {
     public Test3D() {
         super(1280, 720, "Bagel3D");
 
+        camera = Camera.getInstance();
+        camera.setCameraPos(cameraPos);
 
-        camera = new Camera(cameraPos, 135, -45,  90);
 
 
 
@@ -60,7 +67,7 @@ public class Test3D extends AbstractGame {
         world.addObject(new Rectangle3D(new Point3D(0, 200, 500), 100, 100, new Vector3(0,3.14159256/4,0)));
         world.addObject(new Rectangle3D(new Point3D(200, 200, 500), 100, 100, new Vector3(0,0,1)));
 
-        //counter = new Frames(System.nanoTime());
+        //counter = new Bagel3D.Frames(System.nanoTime());
         defaultFont = new Font("res/conformable.otf", 40 );
 
 
@@ -147,9 +154,10 @@ public class Test3D extends AbstractGame {
 
 
         // draw objects
-       world.draw(camera, Window.getWidth(), Window.getHeight(), cameraPos);
+       world.draw(cameraPos);
+       new Image3D(new Bagel3D.util.Point3D(0, 0, 200), "res/sinkhole.png").draw();
         /*
-        for(Object3D object: objects){
+        for(Bagel3D.Object3D object: objects){
             object.draw(camera, Window.getWidth(), Window.getHeight());
         }
 

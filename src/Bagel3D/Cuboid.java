@@ -1,3 +1,7 @@
+package Bagel3D;
+
+import Bagel3D.util.Point3D;
+
 /**
  *  Class to represent cuboids
  */

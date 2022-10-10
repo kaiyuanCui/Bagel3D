@@ -1,7 +1,9 @@
-import bagel.Drawing;
+package Bagel3D;
+
+import Bagel3D.util.Point3D;
+import Bagel3D.util.Vector3;
 import bagel.util.Colour;
 import bagel.util.Point;
-import bagel.util.Vector2;
 
 /**
  *  Class to represent a simple 3D object, which is a 2D shape in 3D space.
@@ -60,7 +62,7 @@ public class SimpleObject extends Object3D {
     }
 
     /**
-     * Overrides the method in Object3D
+     * Overrides the method in Bagel3D.Object3D
      * @param point
      * @return the distance of its closet vertex to the point
      */

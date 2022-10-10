@@ -1,5 +1,12 @@
+package Bagel3D;
+
+import Bagel3D.util.Point3D;
+import Bagel3D.util.Vector3;
+
 /**
  *  Base class of all 3D objects.
+ *
+ * @author kaiyuanCui
  */
 
 public abstract class Object3D implements Comparable<Object3D>{
@@ -21,38 +28,32 @@ public abstract class Object3D implements Comparable<Object3D>{
 
     protected static final Vector3 DEFAULT_LIGHT_SOURCE = new Vector3(1,2,5);
 
+
     /**
      * Draws the object with the Default light source direction
-     * @param camera
-     * @param screenWidth
-     * @param screenHeight
      */
 
-    public void draw(Camera camera, double screenWidth, double screenHeight){
-        draw(camera, screenWidth, screenHeight, DEFAULT_LIGHT_SOURCE);
+    public void draw(){
+        draw(DEFAULT_LIGHT_SOURCE);
     }
 
 
     /**
      * Draws the object with a given light source
-     * @param camera
-     * @param screenWidth
-     * @param screenHeight
+
      * @param lightSource
      */
-    public void draw(Camera camera, double screenWidth, double screenHeight, Point3D lightSource){
+    public void draw( Point3D lightSource){
         // do nothing
     }
 
     /**
      * Draws the object with a given light source direction
-     * @param camera
-     * @param screenWidth
-     * @param screenHeight
+
      * @param lightSourceDirection
      */
 
-    public void draw(Camera camera, double screenWidth, double screenHeight, Vector3 lightSourceDirection){
+    public void draw(Vector3 lightSourceDirection){
         // do nothing
     }
 
@@ -68,7 +69,7 @@ public abstract class Object3D implements Comparable<Object3D>{
     @Override
     public int compareTo(Object3D o) {
         // need a more elegant solution for this?
-        Point3D player = Test3D.getCameraPos();
+        Point3D player = Camera.getInstance().getCameraPos();
 
         // difference of their distances, this further away -> negative
         // return (int) (o.distanceTo(player) - this.distanceTo(player));

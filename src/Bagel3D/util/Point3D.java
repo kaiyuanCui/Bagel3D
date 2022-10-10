@@ -1,3 +1,5 @@
+package Bagel3D.util;
+
 /**
  *  Class to represent a Point in 3D space.
  */
@@ -30,7 +32,7 @@ public class Point3D {
     /**
      *
      * @param another Another point
-     * @return A Vector3 from this point to another
+     * @return A Bagel3D.util.Vector3 from this point to another
      */
     public Vector3 vectorTo(Point3D another){
         return another.toVector().subtract(this.toVector());

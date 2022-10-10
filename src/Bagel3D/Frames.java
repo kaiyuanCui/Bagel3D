@@ -1,3 +1,5 @@
+package Bagel3D;
+
 public class Frames {
     private static final double STANDARD_FPS = 60;
     private static final long SECOND_TO_NANO = 1000000000;

@@ -1,5 +1,7 @@
+package Bagel3D;
 
-
+import Bagel3D.util.Point3D;
+import Bagel3D.util.Vector3;
 import bagel.Drawing;
 import bagel.Font;
 import bagel.util.Colour;
@@ -41,7 +43,7 @@ public class Rectangle3D extends SimpleObject{
 
 
 
-    public Rectangle3D(Point3D v0, Point3D v1, Point3D v2,Point3D v3) {
+    public Rectangle3D(Point3D v0, Point3D v1, Point3D v2, Point3D v3) {
 
         super(v0.toVector().add(v0.vectorTo(v2).divide(2)).toPoint(), VERTICES); // middle
         this.width = v0.distanceTo(v1);
@@ -63,19 +65,17 @@ public class Rectangle3D extends SimpleObject{
 
     /**
      * Draws the Rectangle with a given light source direction
-     * @param camera
-     * @param screenWidth
-     * @param screenHeight
      * @param lightSourceDirection
      */
 
     @Override
-    public void draw(Camera camera, double screenWidth, double screenHeight, Vector3 lightSourceDirection) {
-        // everything here is constant, compute beforehand?
-        double screenDist = (screenWidth / 2) / Math.tan(camera.getFov() / 2);
+    public void draw(Vector3 lightSourceDirection) {
+
+        Camera camera = Camera.getInstance();
 
 
-        Point[] cast_vertices = castVertices(camera, screenWidth, screenHeight);
+
+        Point[] cast_vertices = castVertices(camera, camera.getWidth(), camera.getHeight());
         if (cast_vertices[3] == null) { // return early if the rectangle should not be drawn
             return;
         }
@@ -134,8 +134,8 @@ public class Rectangle3D extends SimpleObject{
         }
 
         // coordinates of the ray projected on a screen
-        double ver = ray.z/ray.x * screenDist + screenHeight/2;
-        double hor = ray.y/ray.x * screenDist + screenWidth/2;
+        // double ver = ray.z/ray.x * camera.getScreenDist() + screenHeight/2;
+        // double hor = ray.y/ray.x * camera.getScreenDist() + screenWidth/2;
         // Drawing.drawCircle(new Point(hor, ver),2, new Colour(1, 0,0)); // draws the pos as a dot
         //defaultFont.drawString(String.valueOf(distanceTo(Test3D.getCameraPos())),hor, ver);
 

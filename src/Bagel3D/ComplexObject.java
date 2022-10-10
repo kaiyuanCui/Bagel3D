@@ -1,3 +1,8 @@
+package Bagel3D;
+
+import Bagel3D.util.Point3D;
+import Bagel3D.util.Vector3;
+
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -26,35 +31,29 @@ public class ComplexObject extends Object3D{
         Collections.sort(subObjects);
     }
 
-
+    @Override
     /**
      * Draws the object with a given light source
-     * @param camera
-     * @param screenWidth
-     * @param screenHeight
      * @param lightSource
      */
-    public void draw(Camera camera, double screenWidth, double screenHeight, Point3D lightSource){
+    public void draw(Point3D lightSource){
         sort();
         for(Object3D object: subObjects.subList(Math.max(0, subObjects.size() - renderSize), subObjects.size())){
 
-            object.draw(camera, screenWidth, screenHeight, object.pos.vectorTo(lightSource));
+            object.draw(object.pos.vectorTo(lightSource));
         }
     }
 
-
+    @Override
     /**
      * Draws the object with a given light source direction
-     * @param camera
-     * @param screenWidth
-     * @param screenHeight
      * @param lightSourceDirection
      */
 
-    public void draw(Camera camera, double screenWidth, double screenHeight, Vector3 lightSourceDirection){
+    public void draw(Vector3 lightSourceDirection){
         sort();
         for(Object3D object: subObjects.subList(Math.max(0, subObjects.size() - renderSize), subObjects.size())){
-            object.draw(camera, screenWidth, screenHeight, lightSourceDirection);
+            object.draw(lightSourceDirection);
         }
 
     }
@@ -64,7 +63,7 @@ public class ComplexObject extends Object3D{
     }
 
     /**
-     * Overrides the method in Object3D
+     * Overrides the method in Bagel3D.Object3D
      * @param point
      * @return the distance of its closet subobject to the point
      */
