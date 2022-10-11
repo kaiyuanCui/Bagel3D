@@ -13,6 +13,7 @@ public class SimpleObject extends Object3D {
     protected Vector3 rotation;
     protected Colour colour;
     protected final int NUM_VERTICES;
+
     public SimpleObject(Point3D pos, int numVertices) {
         super(pos);
         NUM_VERTICES = numVertices;
@@ -21,7 +22,11 @@ public class SimpleObject extends Object3D {
 
 
 
-    public Point[] castVertices(Camera camera, double screenWidth, double screenHeight){
+    public Point[] castVertices(){
+        Camera camera = Camera.getInstance();
+        double screenWidth = camera.getWidth();
+        double screenHeight = camera.getHeight();
+
         double screenDist = (screenWidth /2 )/ Math.tan(camera.getFov()/2);
 
         // points outside the screen
@@ -46,10 +51,10 @@ public class SimpleObject extends Object3D {
 
 
             // do not draw if the projected coordinates are all outside the screen
-            // however, the current implementation would make objects near the edges disappear, if the object is large enough.
+
             if(ver < 0|| ver > screenHeight || hor < 0  || hor > screenWidth){
                 out++;
-                if(out == 4){
+                if(out == NUM_VERTICES){
                     return cast_vertices;
                 }
             }
@@ -82,4 +87,14 @@ public class SimpleObject extends Object3D {
         }
         return sum/NUM_VERTICES;
     }
+
+
+    public Colour getColour() {
+        return colour;
+    }
+
+    public void setColour(Colour colour) {
+        this.colour = colour;
+    }
+
 }

@@ -61,7 +61,10 @@ public class Test3D extends AbstractGame {
             }
 
         }
-        world.addObject(new Image3D(new Point3D(0, 0, 200), "res/sinkhole.png"));
+        Image3D sinkhole = new Image3D (new Point3D(150, 150, 100), "res/sinkhole.png",new Vector3(0,0, 0) );
+        sinkhole.setRotateWithCamera(false);
+        world.addObject(sinkhole);
+        world.addObject(new Image3D(new Point3D(500, 500, 150), "res/navecLeft.png", new Vector3(Math.PI/2,0, 0)));
         world.addObject(new Rectangle3D(new Point3D(0, 0, 500), 100, 100, new Vector3(0,0,0)));
         world.addObject(new Rectangle3D(new Point3D(200, 0, 500), 100, 100, new Vector3(1,0,0)));
         world.addObject(new Rectangle3D(new Point3D(0, 200, 500), 100, 100, new Vector3(0,3.14159256/4,0)));
@@ -155,7 +158,7 @@ public class Test3D extends AbstractGame {
 
         // draw objects
        world.draw(cameraPos);
-       new Image3D(new Bagel3D.util.Point3D(0, 0, 200), "res/sinkhole.png").draw();
+       //new Image3D(new Bagel3D.util.Point3D(0, 0, 200), "res/sinkhole.png").draw();
         /*
         for(Bagel3D.Object3D object: objects){
             object.draw(camera, Window.getWidth(), Window.getHeight());

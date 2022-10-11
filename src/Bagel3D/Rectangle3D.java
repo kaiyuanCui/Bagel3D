@@ -32,10 +32,13 @@ public class Rectangle3D extends SimpleObject{
         vertices = new Point3D[4];
         Vector3[] directions = {new Vector3(0,0,0), new Vector3(width, 0 ,0),
                 new Vector3(width, height, 0), new Vector3(0,height,0 )};
+        // start from bottom left
+        Point3D start = pos.toVector().add(directions[1].rotate(rotation).multiply(-0.5))
+                                        .add(directions[3].rotate(rotation).multiply(-0.5)).toPoint();
 
 
         for (int i = 0; i<4; i++){
-            vertices[i] = new Point3D(pos.toVector().add(directions[i].rotate(rotation)));
+            vertices[i] = new Point3D(start.toVector().add(directions[i].rotate(rotation)));
         }
 
 
@@ -75,7 +78,7 @@ public class Rectangle3D extends SimpleObject{
 
 
 
-        Point[] cast_vertices = castVertices(camera, camera.getWidth(), camera.getHeight());
+        Point[] cast_vertices = castVertices();
         if (cast_vertices[3] == null) { // return early if the rectangle should not be drawn
             return;
         }
@@ -140,8 +143,9 @@ public class Rectangle3D extends SimpleObject{
         //defaultFont.drawString(String.valueOf(distanceTo(Test3D.getCameraPos())),hor, ver);
 
 
-
     }
+
+
 
 }
 
