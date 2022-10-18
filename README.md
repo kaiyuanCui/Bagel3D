@@ -1,2 +1,3 @@
 # Bagel3D
- A 3D graphics engine based on Bagel (Basic Academic Graphical Engine Library)
+ A simple 3D engine that enables real-time rendering of 3D objects within Bagel (Basic Academic Graphical Engine Library) games.
+
