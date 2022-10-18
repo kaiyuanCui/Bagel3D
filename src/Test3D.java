@@ -61,6 +61,7 @@ public class Test3D extends AbstractGame {
             }
 
         }
+        // Images used here are from the 2022 Project 2 of SWEN20003, University of Melbourne
         Image3D sinkhole = new Image3D (new Point3D(150, 150, 100), "res/sinkhole.png",new Vector3(0,0, 0) );
         sinkhole.setRotateWithCamera(false);
         world.addObject(sinkhole);

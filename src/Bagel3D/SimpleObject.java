@@ -41,9 +41,14 @@ public class SimpleObject extends Object3D {
             ray = ray.rotateAroundY(camera.getvAngle());
 
             // point is behind player
+            // （ We sometimes still need to draw the object when one of its vertices is behind, but at this point,
+            //   I am not sure how to do that)
             if(ray.x > 0){
                 return cast_vertices;
             }
+
+
+
 
             // coordinates of the ray projected on a screen
             double ver = ray.z/ray.x * screenDist + screenHeight/2;
@@ -52,7 +57,7 @@ public class SimpleObject extends Object3D {
 
             // do not draw if the projected coordinates are all outside the screen
 
-            if(ver < 0|| ver > screenHeight || hor < 0  || hor > screenWidth){
+            if(ver < 0|| ver > screenHeight || hor < 0  || hor > screenWidth ){
                 out++;
                 if(out == NUM_VERTICES){
                     return cast_vertices;

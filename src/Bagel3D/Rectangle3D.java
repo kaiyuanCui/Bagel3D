@@ -20,15 +20,17 @@ public class Rectangle3D extends SimpleObject{
 
 
     // debug only
-    private final Colour DEBUG = new Colour(0.8, 0.8, 0.8, 1);
+    private static final Colour DEBUG = new Colour(0.8, 0.8, 0.8, 1);
 
-
-    public Rectangle3D(Point3D pos, double width, double height, Vector3 rotation) {
+    public Rectangle3D(Point3D pos, double width, double height, Vector3 rotation){
+        this(pos, width, height, rotation, DEBUG);
+    }
+    public Rectangle3D(Point3D pos, double width, double height, Vector3 rotation, Colour colour) {
         super(pos, VERTICES);
         this.width = width;
         this.height = height;
         this.rotation = rotation;
-        this.colour = DEBUG;
+        this.colour = colour;
         vertices = new Point3D[4];
         Vector3[] directions = {new Vector3(0,0,0), new Vector3(width, 0 ,0),
                 new Vector3(width, height, 0), new Vector3(0,height,0 )};
@@ -79,9 +81,8 @@ public class Rectangle3D extends SimpleObject{
 
 
         Point[] cast_vertices = castVertices();
-        if (cast_vertices[3] == null) { // return early if the rectangle should not be drawn
-            return;
-        }
+        // return early if the rectangle should not be drawn
+        if (cast_vertices[3] == null) return;
 
 
         // how much the normal is projected in the direction of the light source (might be better using angles instead)

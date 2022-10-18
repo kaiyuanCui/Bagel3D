@@ -44,7 +44,7 @@ public abstract class Object3D implements Comparable<Object3D>{
      * @param lightSource
      */
     public void draw( Point3D lightSource){
-        // do nothing
+        draw(pos.vectorTo(lightSource));
     }
 
     /**
