@@ -9,10 +9,14 @@ import bagel.util.Point;
  *  Class to represent a simple 3D object, which is a 2D shape in 3D space.
  */
 public class SimpleObject extends Object3D {
-    protected Point3D[] vertices;
-    protected Vector3 rotation;
-    protected Colour colour;
-    protected final int NUM_VERTICES;
+    private Point3D[] vertices;
+    // private Vector3 rotation;
+    private Colour colour = DEFAULT_COLOUR;
+    private static final Colour DEFAULT_COLOUR = new Colour(0.8, 0.8, 0.8, 1);
+    private final int NUM_VERTICES;
+    private int lineWidth = 5;  // the width of the lines used to fill in the rectangles,
+    // wider = better performance, but less visual quality
+    private boolean hasOutline = true;
 
     public SimpleObject(Point3D pos, int numVertices) {
         super(pos);
@@ -102,4 +106,31 @@ public class SimpleObject extends Object3D {
         this.colour = colour;
     }
 
+    public boolean hasOutline() {
+        return hasOutline;
+    }
+
+    public void setHasOutline(boolean hasOutline) {
+        this.hasOutline = hasOutline;
+    }
+
+    public Point3D[] getVertices() {
+        return vertices;
+    }
+
+    public void setVertices(Point3D[] vertices) {
+        this.vertices = vertices;
+    }
+
+    public int getNUM_VERTICES() {
+        return NUM_VERTICES;
+    }
+
+    public int getLineWidth() {
+        return lineWidth;
+    }
+
+    public void setLineWidth(int lineWidth) {
+        this.lineWidth = lineWidth;
+    }
 }

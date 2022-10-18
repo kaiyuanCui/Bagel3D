@@ -33,7 +33,7 @@ public class Image3D extends Object3D{
         this.rect = getRect();
         rect.setColour(new Colour(1,0,0));
         centre = new SimpleObject(pos, 1);
-        centre.vertices[0] = pos;
+        centre.getVertices()[0] = pos;
     }
 
     public Rectangle3D getRect(){

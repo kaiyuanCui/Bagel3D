@@ -12,26 +12,20 @@ public class Rectangle3D extends SimpleObject{
     private double width;
     private double height;
 
-    private final int lineWidth = 7;  // the width of the lines used to fill in the rectangles,
-                                        // wider = better performance, but less visual quality
-
     private static final Font defaultFont = new Font("res/conformable.otf", 20 );; // used to debug
     private static final int VERTICES = 4;
 
 
     // debug only
-    private static final Colour DEBUG = new Colour(0.8, 0.8, 0.8, 1);
 
-    public Rectangle3D(Point3D pos, double width, double height, Vector3 rotation){
-        this(pos, width, height, rotation, DEBUG);
-    }
-    public Rectangle3D(Point3D pos, double width, double height, Vector3 rotation, Colour colour) {
+
+
+    public Rectangle3D(Point3D pos, double width, double height, Vector3 rotation) {
         super(pos, VERTICES);
         this.width = width;
         this.height = height;
-        this.rotation = rotation;
-        this.colour = colour;
-        vertices = new Point3D[4];
+        // this.rotation = rotation;  // not used?
+
         Vector3[] directions = {new Vector3(0,0,0), new Vector3(width, 0 ,0),
                 new Vector3(width, height, 0), new Vector3(0,height,0 )};
         // start from bottom left
@@ -40,7 +34,7 @@ public class Rectangle3D extends SimpleObject{
 
 
         for (int i = 0; i<4; i++){
-            vertices[i] = new Point3D(start.toVector().add(directions[i].rotate(rotation)));
+            getVertices()[i] =  new Point3D(start.toVector().add(directions[i].rotate(rotation)));
         }
 
 
@@ -53,19 +47,17 @@ public class Rectangle3D extends SimpleObject{
         super(v0.toVector().add(v0.vectorTo(v2).divide(2)).toPoint(), VERTICES); // middle
         this.width = v0.distanceTo(v1);
         this.height = v0.distanceTo(v3);
-        this.colour = DEBUG;
-        vertices = new Point3D[4];
 
-        vertices[0] = v0;
-        vertices[1] = v1;
-        vertices[2] = v2;
-        vertices[3] = v3;
+
+
+        getVertices()[0] = v0;
+        getVertices()[1] = v1;
+        getVertices()[2] = v2;
+        getVertices()[3] = v3;
     }
 
 
-    public void setColour(Colour colour) {
-        this.colour = colour;
-    }
+
 
 
     /**
@@ -79,7 +71,7 @@ public class Rectangle3D extends SimpleObject{
         Camera camera = Camera.getInstance();
 
 
-
+        Point3D[] vertices = getVertices();
         Point[] cast_vertices = castVertices();
         // return early if the rectangle should not be drawn
         if (cast_vertices[3] == null) return;
@@ -91,9 +83,9 @@ public class Rectangle3D extends SimpleObject{
                 projectionLength(lightSourceDirection);
 
         double environmentalLight = 0.2; // change to a constant later
-        Colour drawColour = new Colour(colour.r * (environmentalLight + (1 - environmentalLight) * light),
-                colour.g * (environmentalLight + (1 - environmentalLight) * light),
-                colour.b * (environmentalLight + (1 - environmentalLight) * light),
+        Colour drawColour = new Colour(getColour().r * (environmentalLight + (1 - environmentalLight) * light),
+                getColour().g * (environmentalLight + (1 - environmentalLight) * light),
+                getColour().b * (environmentalLight + (1 - environmentalLight) * light),
                 2.5 - camera.getCameraPos().distanceTo(pos) / 500); // distance fog, only looks good when on ground
 
 
@@ -109,23 +101,28 @@ public class Rectangle3D extends SimpleObject{
         cast_rgt_dir = cast_rgt_dir.normalised();
 
 
-        for (int s = 0; s < topLen; s += lineWidth) {
-            Drawing.drawLine(cast_vertices[0].asVector().add(cast_top_dir.mul(s)).asPoint(), cast_vertices[2], lineWidth, drawColour);
+        for (int s = 0; s < topLen; s += getLineWidth()) {
+            Drawing.drawLine(cast_vertices[0].asVector().add(cast_top_dir.mul(s)).asPoint(), cast_vertices[2],
+                                                                                            getLineWidth(), drawColour);
             // rectangle.drawLine(cast_vertices[2].asVector().add(cast_y_dir.normalised().mul(s)).asPoint(),cast_vertices[0],2, DEBUG);
             // rectangle.drawLine(cast_vertices[1].asVector().add(cast_x_dir.normalised().mul(s)).asPoint(),cast_vertices[2],2, DEBUG);
         }
 
-        for (int j = 0; j < rgtLen; j += lineWidth) {
-            Drawing.drawLine(cast_vertices[0].asVector().add(cast_rgt_dir.mul(j)).asPoint(), cast_vertices[2], lineWidth, drawColour);
+        for (int j = 0; j < rgtLen; j += getLineWidth()) {
+            Drawing.drawLine(cast_vertices[0].asVector().add(cast_rgt_dir.mul(j)).asPoint(), cast_vertices[2],
+                                                                                            getLineWidth(), drawColour);
         }
 
 
         // draw an outline of the shape
-        for(int i = 0; i < 3; i++){
-            Drawing.drawLine(cast_vertices[i],cast_vertices[i+1],2, new Colour(0,0,0, drawColour.a));
+        if (hasOutline()){
+            for(int i = 0; i < 3; i++){
+                Drawing.drawLine(cast_vertices[i],cast_vertices[i+1],2, new Colour(0,0,0, drawColour.a));
+            }
+
+            Drawing.drawLine(cast_vertices[3],cast_vertices[0],2, new Colour(0,0,0, drawColour.a));
         }
 
-        Drawing.drawLine(cast_vertices[3],cast_vertices[0],2, new Colour(0,0,0, drawColour.a));
 
 
         Vector3 ray = pos.toVector().subtract(camera.getCameraPos().toVector());
